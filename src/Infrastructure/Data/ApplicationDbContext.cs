@@ -14,6 +14,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<TodoList> TodoLists => Set<TodoList>();
 
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
+    public DbSet<Chicken> Chickens => Set<Chicken>();
+    public DbSet<Cow> Cows => Set<Cow>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

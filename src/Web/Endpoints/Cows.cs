@@ -1,8 +1,8 @@
-
 using Microsoft.AspNetCore.Http.HttpResults;
 using TestCleanArch.Application.Cows.Commands;
 using TestCleanArch.Application.Cows.Commands.CreateCow;
 using TestCleanArch.Application.Cows.Queries.GetCows;
+using TestCleanArch.Application.Cows.Queries.GetCowsPerQuarter;
 
 namespace TestCleanArch.Web.Endpoints;
 
@@ -15,6 +15,9 @@ public class Cows : EndpointGroupBase
 
         groupBuilder
             .MapPost(CreateCow);
+
+        groupBuilder
+            .MapGet(GetCowsPerQuarter, "/per-quarter");
     }
 
     public async Task<Ok<List<Domain.Entities.Cow>>> GetCows(ISender sender)
@@ -27,5 +30,11 @@ public class Cows : EndpointGroupBase
     {
         var id = await sender.Send(command);
         return TypedResults.Created($"/{nameof(Cows)}/{id}", id);
+    }
+
+    public async Task<Ok<List<QuarterCountDto>>> GetCowsPerQuarter(ISender sender, [AsParameters] GetCowsPerQuarterQuery query)
+    {
+        var result = await sender.Send(query);
+        return TypedResults.Ok(result);
     }
 }

@@ -100,6 +100,52 @@ export class ChickensClient {
         }
         return Promise.resolve<number>(null as any);
     }
+
+    getChickensPerQuarter(dateFrom: Date | null | undefined, dateTo: Date | null | undefined): Promise<QuarterCountDto[]> {
+        let url_ = this.baseUrl + "/api/Chickens/per-quarter?";
+        if (dateFrom !== undefined && dateFrom !== null)
+            url_ += "DateFrom=" + encodeURIComponent(dateFrom ? "" + dateFrom.toISOString() : "") + "&";
+        if (dateTo !== undefined && dateTo !== null)
+            url_ += "DateTo=" + encodeURIComponent(dateTo ? "" + dateTo.toISOString() : "") + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetChickensPerQuarter(_response);
+        });
+    }
+
+    protected processGetChickensPerQuarter(response: Response): Promise<QuarterCountDto[]> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(QuarterCountDto.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<QuarterCountDto[]>(null as any);
+    }
 }
 
 export class CowsClient {
@@ -192,6 +238,52 @@ export class CowsClient {
             });
         }
         return Promise.resolve<number>(null as any);
+    }
+
+    getCowsPerQuarter(dateFrom: Date | null | undefined, dateTo: Date | null | undefined): Promise<QuarterCountDto2[]> {
+        let url_ = this.baseUrl + "/api/Cows/per-quarter?";
+        if (dateFrom !== undefined && dateFrom !== null)
+            url_ += "DateFrom=" + encodeURIComponent(dateFrom ? "" + dateFrom.toISOString() : "") + "&";
+        if (dateTo !== undefined && dateTo !== null)
+            url_ += "DateTo=" + encodeURIComponent(dateTo ? "" + dateTo.toISOString() : "") + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetCowsPerQuarter(_response);
+        });
+    }
+
+    protected processGetCowsPerQuarter(response: Response): Promise<QuarterCountDto2[]> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(QuarterCountDto2.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<QuarterCountDto2[]>(null as any);
     }
 }
 
@@ -820,6 +912,46 @@ export interface ICreateChickenCommand {
     birthDate?: Date;
 }
 
+export class QuarterCountDto implements IQuarterCountDto {
+    quarter?: string;
+    count?: number;
+
+    constructor(data?: IQuarterCountDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.quarter = _data["quarter"];
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): QuarterCountDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new QuarterCountDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["quarter"] = this.quarter;
+        data["count"] = this.count;
+        return data;
+    }
+}
+
+export interface IQuarterCountDto {
+    quarter?: string;
+    count?: number;
+}
+
 export class Cow extends BaseAuditableEntity implements ICow {
     cowName?: string;
     birthDate?: Date;
@@ -895,6 +1027,46 @@ export class CreateCowCommand implements ICreateCowCommand {
 export interface ICreateCowCommand {
     cowName?: string | undefined;
     birthDate?: Date;
+}
+
+export class QuarterCountDto2 implements IQuarterCountDto2 {
+    quarter?: string;
+    count?: number;
+
+    constructor(data?: IQuarterCountDto2) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.quarter = _data["quarter"];
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): QuarterCountDto2 {
+        data = typeof data === 'object' ? data : {};
+        let result = new QuarterCountDto2();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["quarter"] = this.quarter;
+        data["count"] = this.count;
+        return data;
+    }
+}
+
+export interface IQuarterCountDto2 {
+    quarter?: string;
+    count?: number;
 }
 
 export class PaginatedListOfTodoItemBriefDto implements IPaginatedListOfTodoItemBriefDto {

@@ -60,6 +60,51 @@
         }
       }
     },
+    "/api/Chickens/per-quarter": {
+      "get": {
+        "tags": [
+          "Chickens"
+        ],
+        "operationId": "GetChickensPerQuarter",
+        "parameters": [
+          {
+            "name": "DateFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "DateTo",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "nullable": true
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuarterCountDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Cows": {
       "get": {
         "tags": [
@@ -107,6 +152,51 @@
                 "schema": {
                   "type": "integer",
                   "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Cows/per-quarter": {
+      "get": {
+        "tags": [
+          "Cows"
+        ],
+        "operationId": "GetCowsPerQuarter",
+        "parameters": [
+          {
+            "name": "DateFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "DateTo",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "nullable": true
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuarterCountDto2"
+                  }
                 }
               }
             }
@@ -528,6 +618,19 @@
           }
         }
       },
+      "QuarterCountDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "quarter": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "Cow": {
         "allOf": [
           {
@@ -561,6 +664,19 @@
           "birthDate": {
             "type": "string",
             "format": "date"
+          }
+        }
+      },
+      "QuarterCountDto2": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "quarter": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

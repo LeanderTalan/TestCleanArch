@@ -116,7 +116,7 @@ public class ApplicationDbContextInitialiser
                 var daysAgo = random.Next(365 * 5); // Random date within last 5 years
                 var birthDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-daysAgo));
 
-                cows.Add(new Cow { CowName = name, BirthDate = birthDate });
+                cows.Add(new Cow { CowName = name, BirthDate = birthDate, CreatedBy="Seeder", Created=DateTime.Now, LastModifiedBy="Seeder", LastModified=DateTime.Now });
             }
             for (int i = 0; i < 70; i++)
             {
@@ -124,7 +124,7 @@ public class ApplicationDbContextInitialiser
                 var daysAgo = random.Next(365 * 2) + 365*3; // Random date within last 5 years
                 var birthDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-daysAgo));
 
-                cows.Add(new Cow { CowName = name, BirthDate = birthDate });
+               cows.Add(new Cow { CowName = name, BirthDate = birthDate, CreatedBy="Seeder", Created=DateTime.Now, LastModifiedBy="Seeder", LastModified=DateTime.Now });
             }
 
             _context.Cows.AddRange(cows);
@@ -143,7 +143,7 @@ public class ApplicationDbContextInitialiser
                 var daysAgo = random.Next(365 * 5); // Random date within last 5 years
                 var birthDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-daysAgo));
 
-                chickens.Add(new Chicken { ChickenName = name, BirthDate = birthDate });
+                chickens.Add(new Chicken { ChickenName = name, BirthDate = birthDate, CreatedBy="Seeder", Created=DateTime.Now, LastModifiedBy="Seeder", LastModified=DateTime.Now });
             }
             for (int i = 0; i < 200; i++)
             {
@@ -151,7 +151,7 @@ public class ApplicationDbContextInitialiser
                 var daysAgo = random.Next(365 * 2); // Random date within last 2 years
                 var birthDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-daysAgo));
 
-                chickens.Add(new Chicken { ChickenName = name, BirthDate = birthDate });
+                chickens.Add(new Chicken { ChickenName = name, BirthDate = birthDate, CreatedBy="Seeder", Created=DateTime.Now, LastModifiedBy="Seeder", LastModified=DateTime.Now });
             }
 
             _context.Chickens.AddRange(chickens);

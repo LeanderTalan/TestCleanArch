@@ -8,8 +8,6 @@ public class ChickenConfiguration : IEntityTypeConfiguration<Chicken>
 {
     public void Configure(EntityTypeBuilder<Chicken> builder)
     {
-        // builder.Property(t => t.ChickenName)
-        //     .HasMaxLength(3)
-        //     .IsRequired();
+        builder.HasIndex(c => c.BirthDate);
     }
 }

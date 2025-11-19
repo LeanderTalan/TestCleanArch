@@ -8,7 +8,6 @@ public class CowConfiguration : IEntityTypeConfiguration<Cow>
 {
     public void Configure(EntityTypeBuilder<Cow> builder)
     {
-        // builder.Property(t => t.CowName)
-        //     .IsRequired();
+        builder.HasIndex(c => c.BirthDate);
     }
 }

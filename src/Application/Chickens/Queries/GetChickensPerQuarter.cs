@@ -17,50 +17,68 @@ public class GetChickensPerQuarterQueryHandler : IRequestHandler<GetChickensPerQ
 
     public async Task<List<QuarterCountDto>> Handle(GetChickensPerQuarterQuery request, CancellationToken cancellationToken)
     {
-        // Determine date range
-        var minDateQuery = _context.Chickens.Select(c => c.BirthDate);
-        var minDate = request.DateFrom ?? (await minDateQuery.AnyAsync(cancellationToken) 
-            ? await minDateQuery.MinAsync(cancellationToken) 
-            : DateOnly.FromDateTime(DateTime.Now));
-        
-        var maxDate = request.DateTo ?? DateOnly.FromDateTime(DateTime.Now);
+        var query = _context.Chickens.AsNoTracking().AsQueryable();
 
-        var quarters = GenerateQuarters(minDate, maxDate);
-
-        var result = new List<QuarterCountDto>();
-
-        foreach (var q in quarters)
+        // Apply date filters if provided
+        if (request.DateFrom.HasValue)
         {
-            var quarterEnd = new DateOnly(q.Year, q.Quarter * 3, DateTime.DaysInMonth(q.Year, q.Quarter * 3));
-            
-            // Count in database - cumulative count up to quarter end
-            var count = await _context.Chickens
-                .Where(c => c.BirthDate <= quarterEnd)
-                .CountAsync(cancellationToken);
-            
-            result.Add(new QuarterCountDto($"{q.Year} Q{q.Quarter}", count));
+            query = query.Where(c => c.BirthDate >= request.DateFrom.Value);
         }
 
-        return result;
-    }
-
-    private static List<(int Year, int Quarter)> GenerateQuarters(DateOnly start, DateOnly end)
-    {
-        var quarters = new List<(int Year, int Quarter)>();
-        var startQuarter = (start.Month - 1) / 3 + 1;
-        var endQuarter = (end.Month - 1) / 3 + 1;
-
-        for (int year = start.Year; year <= end.Year; year++)
+        if (request.DateTo.HasValue)
         {
-            int firstQ = (year == start.Year) ? startQuarter : 1;
-            int lastQ = (year == end.Year) ? endQuarter : 4;
+            query = query.Where(c => c.BirthDate <= request.DateTo.Value);
+        }
 
-            for (int q = firstQ; q <= lastQ; q++)
+        // Group by year and quarter, then count - all in database
+        var grouped = await query
+            .GroupBy(c => new
             {
-                quarters.Add((year, q));
+                Year = c.BirthDate.Year,
+                Quarter = (c.BirthDate.Month - 1) / 3 + 1
+            })
+            .Select(g => new
+            {
+                Year = g.Key.Year,
+                Quarter = g.Key.Quarter,
+                Count = g.Count()
+            })
+            .OrderBy(x => x.Year)
+            .ThenBy(x => x.Quarter)
+            .ToListAsync(cancellationToken);
+
+        if (!grouped.Any())
+            return new List<QuarterCountDto>();
+
+        // Fill in missing quarters
+        var minYear = grouped.First().Year;
+        var minQuarter = grouped.First().Quarter;
+        var maxYear = grouped.Last().Year;
+        var maxQuarter = grouped.Last().Quarter;
+
+        var groupedDict = grouped.ToDictionary(g => (g.Year, g.Quarter), g => g.Count);
+        var completeData = new List<(int Year, int Quarter, int Count)>();
+
+        for (int year = minYear; year <= maxYear; year++)
+        {
+            int startQ = (year == minYear) ? minQuarter : 1;
+            int endQ = (year == maxYear) ? maxQuarter : 4;
+
+            for (int q = startQ; q <= endQ; q++)
+            {
+                var count = groupedDict.GetValueOrDefault((year, q), 0);
+                completeData.Add((year, q, count));
             }
         }
 
-        return quarters;
+        // Calculate cumulative counts
+        var cumulativeCount = 0;
+        var result = completeData.Select(g =>
+        {
+            cumulativeCount += g.Count;
+            return new QuarterCountDto($"{g.Year} Q{g.Quarter}", cumulativeCount);
+        }).ToList();
+
+        return result;
     }
 }

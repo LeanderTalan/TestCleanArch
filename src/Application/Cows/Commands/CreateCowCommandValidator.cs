@@ -1,6 +1,6 @@
 using TestCleanArch.Application.Common.Interfaces;
 
-namespace TestCleanArch.Application.Cows.Commands.CreateCow;
+namespace TestCleanArch.Application.Cows.Commands.CreateCowCommand;
 
 public class CreateCowCommandValidator : AbstractValidator<CreateCowCommand>
 {

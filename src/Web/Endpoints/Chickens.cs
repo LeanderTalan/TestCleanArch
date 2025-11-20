@@ -1,5 +1,5 @@
 using TestCleanArch.Application.Chickens.Commands;
-using TestCleanArch.Application.Chickens.Queries.GetChickens;
+using TestCleanArch.Application.Chickens.Queries.GetChickensQuery;
 using Microsoft.AspNetCore.Http.HttpResults;
 using TestCleanArch.Application.Chickens.Commands.CreateChickenCommand;
 using TestCleanArch.Application.Chickens.Queries.GetChickensPerQuarterQuery;

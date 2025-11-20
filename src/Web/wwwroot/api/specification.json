@@ -96,7 +96,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/QuarterCountDto"
+                    "$ref": "#/components/schemas/GetChickensPerQuarterQueryDto"
                   }
                 }
               }
@@ -195,7 +195,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/QuarterCountDto2"
+                    "$ref": "#/components/schemas/GetCowsPerQuarterQueryDto"
                   }
                 }
               }
@@ -618,7 +618,7 @@
           }
         }
       },
-      "QuarterCountDto": {
+      "GetChickensPerQuarterQueryDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -667,7 +667,7 @@
           }
         }
       },
-      "QuarterCountDto2": {
+      "GetCowsPerQuarterQueryDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

@@ -1,7 +1,7 @@
 using TestCleanArch.Application.Common.Interfaces;
 using TestCleanArch.Domain.Entities;
 
-namespace TestCleanArch.Application.Cows.Commands.CreateCow;
+namespace TestCleanArch.Application.Cows.Commands.CreateCowCommand;
 
 public record CreateCowCommand : IRequest<int>
 {

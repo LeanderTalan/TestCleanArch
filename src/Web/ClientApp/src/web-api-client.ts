@@ -101,7 +101,7 @@ export class ChickensClient {
         return Promise.resolve<number>(null as any);
     }
 
-    getChickensPerQuarter(dateFrom: Date | null | undefined, dateTo: Date | null | undefined): Promise<QuarterCountDto[]> {
+    getChickensPerQuarter(dateFrom: Date | null | undefined, dateTo: Date | null | undefined): Promise<GetChickensPerQuarterQueryDto[]> {
         let url_ = this.baseUrl + "/api/Chickens/per-quarter?";
         if (dateFrom !== undefined && dateFrom !== null)
             url_ += "DateFrom=" + encodeURIComponent(dateFrom ? "" + dateFrom.toISOString() : "") + "&";
@@ -121,7 +121,7 @@ export class ChickensClient {
         });
     }
 
-    protected processGetChickensPerQuarter(response: Response): Promise<QuarterCountDto[]> {
+    protected processGetChickensPerQuarter(response: Response): Promise<GetChickensPerQuarterQueryDto[]> {
         followIfLoginRedirect(response);
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
@@ -132,7 +132,7 @@ export class ChickensClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(QuarterCountDto.fromJS(item));
+                    result200!.push(GetChickensPerQuarterQueryDto.fromJS(item));
             }
             else {
                 result200 = null as any;
@@ -144,7 +144,7 @@ export class ChickensClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<QuarterCountDto[]>(null as any);
+        return Promise.resolve<GetChickensPerQuarterQueryDto[]>(null as any);
     }
 }
 
@@ -240,7 +240,7 @@ export class CowsClient {
         return Promise.resolve<number>(null as any);
     }
 
-    getCowsPerQuarter(dateFrom: Date | null | undefined, dateTo: Date | null | undefined): Promise<QuarterCountDto2[]> {
+    getCowsPerQuarter(dateFrom: Date | null | undefined, dateTo: Date | null | undefined): Promise<GetCowsPerQuarterQueryDto[]> {
         let url_ = this.baseUrl + "/api/Cows/per-quarter?";
         if (dateFrom !== undefined && dateFrom !== null)
             url_ += "DateFrom=" + encodeURIComponent(dateFrom ? "" + dateFrom.toISOString() : "") + "&";
@@ -260,7 +260,7 @@ export class CowsClient {
         });
     }
 
-    protected processGetCowsPerQuarter(response: Response): Promise<QuarterCountDto2[]> {
+    protected processGetCowsPerQuarter(response: Response): Promise<GetCowsPerQuarterQueryDto[]> {
         followIfLoginRedirect(response);
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
@@ -271,7 +271,7 @@ export class CowsClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(QuarterCountDto2.fromJS(item));
+                    result200!.push(GetCowsPerQuarterQueryDto.fromJS(item));
             }
             else {
                 result200 = null as any;
@@ -283,7 +283,7 @@ export class CowsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<QuarterCountDto2[]>(null as any);
+        return Promise.resolve<GetCowsPerQuarterQueryDto[]>(null as any);
     }
 }
 
@@ -912,11 +912,11 @@ export interface ICreateChickenCommand {
     birthDate?: Date;
 }
 
-export class QuarterCountDto implements IQuarterCountDto {
+export class GetChickensPerQuarterQueryDto implements IGetChickensPerQuarterQueryDto {
     quarter?: string;
     count?: number;
 
-    constructor(data?: IQuarterCountDto) {
+    constructor(data?: IGetChickensPerQuarterQueryDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -932,9 +932,9 @@ export class QuarterCountDto implements IQuarterCountDto {
         }
     }
 
-    static fromJS(data: any): QuarterCountDto {
+    static fromJS(data: any): GetChickensPerQuarterQueryDto {
         data = typeof data === 'object' ? data : {};
-        let result = new QuarterCountDto();
+        let result = new GetChickensPerQuarterQueryDto();
         result.init(data);
         return result;
     }
@@ -947,7 +947,7 @@ export class QuarterCountDto implements IQuarterCountDto {
     }
 }
 
-export interface IQuarterCountDto {
+export interface IGetChickensPerQuarterQueryDto {
     quarter?: string;
     count?: number;
 }
@@ -1029,11 +1029,11 @@ export interface ICreateCowCommand {
     birthDate?: Date;
 }
 
-export class QuarterCountDto2 implements IQuarterCountDto2 {
+export class GetCowsPerQuarterQueryDto implements IGetCowsPerQuarterQueryDto {
     quarter?: string;
     count?: number;
 
-    constructor(data?: IQuarterCountDto2) {
+    constructor(data?: IGetCowsPerQuarterQueryDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1049,9 +1049,9 @@ export class QuarterCountDto2 implements IQuarterCountDto2 {
         }
     }
 
-    static fromJS(data: any): QuarterCountDto2 {
+    static fromJS(data: any): GetCowsPerQuarterQueryDto {
         data = typeof data === 'object' ? data : {};
-        let result = new QuarterCountDto2();
+        let result = new GetCowsPerQuarterQueryDto();
         result.init(data);
         return result;
     }
@@ -1064,7 +1064,7 @@ export class QuarterCountDto2 implements IQuarterCountDto2 {
     }
 }
 
-export interface IQuarterCountDto2 {
+export interface IGetCowsPerQuarterQueryDto {
     quarter?: string;
     count?: number;
 }

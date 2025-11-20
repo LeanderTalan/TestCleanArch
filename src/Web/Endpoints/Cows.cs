@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using TestCleanArch.Application.Cows.Commands;
-using TestCleanArch.Application.Cows.Commands.CreateCow;
+using TestCleanArch.Application.Cows.Commands.CreateCowCommand;
 using TestCleanArch.Application.Cows.Queries.GetCowsQuery;
 using TestCleanArch.Application.Cows.Queries.GetCowsPerQuarterQuery;
 

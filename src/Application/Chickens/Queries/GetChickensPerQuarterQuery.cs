@@ -1,12 +1,12 @@
 using TestCleanArch.Application.Common.Interfaces;
 
-namespace TestCleanArch.Application.Chickens.Queries.GetChickensPerQuarter;
+namespace TestCleanArch.Application.Chickens.Queries.GetChickensPerQuarterQuery;
 
-public record QuarterCountDto(string Quarter, int Count);
+public record GetChickensPerQuarterQueryDto(string Quarter, int Count);
 
-public record GetChickensPerQuarterQuery(DateOnly? DateFrom, DateOnly? DateTo) : IRequest<List<QuarterCountDto>>;
+public record GetChickensPerQuarterQuery(DateOnly? DateFrom, DateOnly? DateTo) : IRequest<List<GetChickensPerQuarterQueryDto>>;
 
-public class GetChickensPerQuarterQueryHandler : IRequestHandler<GetChickensPerQuarterQuery, List<QuarterCountDto>>
+public class GetChickensPerQuarterQueryHandler : IRequestHandler<GetChickensPerQuarterQuery, List<GetChickensPerQuarterQueryDto>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -15,7 +15,7 @@ public class GetChickensPerQuarterQueryHandler : IRequestHandler<GetChickensPerQ
         _context = context;
     }
 
-    public async Task<List<QuarterCountDto>> Handle(GetChickensPerQuarterQuery request, CancellationToken cancellationToken)
+    public async Task<List<GetChickensPerQuarterQueryDto>> Handle(GetChickensPerQuarterQuery request, CancellationToken cancellationToken)
     {
         var query = _context.Chickens.AsNoTracking().AsQueryable();
 
@@ -48,7 +48,7 @@ public class GetChickensPerQuarterQueryHandler : IRequestHandler<GetChickensPerQ
             .ToListAsync(cancellationToken);
 
         if (!grouped.Any())
-            return new List<QuarterCountDto>();
+            return new List<GetChickensPerQuarterQueryDto>();
 
         // Fill in missing quarters
         var minYear = grouped.First().Year;
@@ -76,7 +76,7 @@ public class GetChickensPerQuarterQueryHandler : IRequestHandler<GetChickensPerQ
         var result = completeData.Select(g =>
         {
             cumulativeCount += g.Count;
-            return new QuarterCountDto($"{g.Year} Q{g.Quarter}", cumulativeCount);
+            return new GetChickensPerQuarterQueryDto($"{g.Year} Q{g.Quarter}", cumulativeCount);
         }).ToList();
 
         return result;

@@ -3,7 +3,7 @@ using TestCleanArch.Application.Common.Mappings;
 using TestCleanArch.Application.Common.Models;
 using TestCleanArch.Domain.Entities;
 
-namespace TestCleanArch.Application.Chickens.Queries.GetChickens;
+namespace TestCleanArch.Application.Chickens.Queries.GetChickensQuery;
 
 public record GetChickensQuery : IRequest<List<Chicken>>;
 

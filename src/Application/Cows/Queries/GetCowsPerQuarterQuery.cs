@@ -1,12 +1,12 @@
 using TestCleanArch.Application.Common.Interfaces;
 
-namespace TestCleanArch.Application.Cows.Queries.GetCowsPerQuarter;
+namespace TestCleanArch.Application.Cows.Queries.GetCowsPerQuarterQuery;
 
-public record QuarterCountDto(string Quarter, int Count);
+public record GetCowsPerQuarterQueryDto(string Quarter, int Count);
 
-public record GetCowsPerQuarterQuery(DateOnly? DateFrom, DateOnly? DateTo) : IRequest<List<QuarterCountDto>>;
+public record GetCowsPerQuarterQuery(DateOnly? DateFrom, DateOnly? DateTo) : IRequest<List<GetCowsPerQuarterQueryDto>>;
 
-public class GetCowsPerQuarterQueryHandler : IRequestHandler<GetCowsPerQuarterQuery, List<QuarterCountDto>>
+public class GetCowsPerQuarterQueryHandler : IRequestHandler<GetCowsPerQuarterQuery, List<GetCowsPerQuarterQueryDto>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -15,7 +15,7 @@ public class GetCowsPerQuarterQueryHandler : IRequestHandler<GetCowsPerQuarterQu
         _context = context;
     }
 
-    public async Task<List<QuarterCountDto>> Handle(GetCowsPerQuarterQuery request, CancellationToken cancellationToken)
+    public async Task<List<GetCowsPerQuarterQueryDto>> Handle(GetCowsPerQuarterQuery request, CancellationToken cancellationToken)
     {
         var query = _context.Cows.AsNoTracking().AsQueryable();
 
@@ -48,7 +48,7 @@ public class GetCowsPerQuarterQueryHandler : IRequestHandler<GetCowsPerQuarterQu
             .ToListAsync(cancellationToken);
 
         if (!grouped.Any())
-            return new List<QuarterCountDto>();
+            return new List<GetCowsPerQuarterQueryDto>();
 
         // Fill in missing quarters
         var minYear = grouped.First().Year;
@@ -76,7 +76,7 @@ public class GetCowsPerQuarterQueryHandler : IRequestHandler<GetCowsPerQuarterQu
         var result = completeData.Select(g =>
         {
             cumulativeCount += g.Count;
-            return new QuarterCountDto($"{g.Year} Q{g.Quarter}", cumulativeCount);
+            return new GetCowsPerQuarterQueryDto($"{g.Year} Q{g.Quarter}", cumulativeCount);
         }).ToList();
 
         return result;

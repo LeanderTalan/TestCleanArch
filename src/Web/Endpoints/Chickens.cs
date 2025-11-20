@@ -1,8 +1,8 @@
 using TestCleanArch.Application.Chickens.Commands;
 using TestCleanArch.Application.Chickens.Queries.GetChickens;
 using Microsoft.AspNetCore.Http.HttpResults;
-using TestCleanArch.Application.Chickens.Commands.CreateChicken;
-using TestCleanArch.Application.Chickens.Queries.GetChickensPerQuarter;
+using TestCleanArch.Application.Chickens.Commands.CreateChickenCommand;
+using TestCleanArch.Application.Chickens.Queries.GetChickensPerQuarterQuery;
 
 namespace TestCleanArch.Web.Endpoints;
 
@@ -32,7 +32,7 @@ public class Chickens : EndpointGroupBase
         return TypedResults.Created($"/{nameof(Chickens)}/{id}", id);
     }
 
-    public async Task<Ok<List<QuarterCountDto>>> GetChickensPerQuarter(ISender sender, [AsParameters] GetChickensPerQuarterQuery query)
+    public async Task<Ok<List<GetChickensPerQuarterQueryDto>>> GetChickensPerQuarter(ISender sender, [AsParameters] GetChickensPerQuarterQuery query)
     {
         var result = await sender.Send(query);
         return TypedResults.Ok(result);

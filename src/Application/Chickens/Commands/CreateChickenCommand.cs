@@ -1,7 +1,7 @@
 using TestCleanArch.Application.Common.Interfaces;
 using TestCleanArch.Domain.Entities;
 
-namespace TestCleanArch.Application.Chickens.Commands.CreateChicken;
+namespace TestCleanArch.Application.Chickens.Commands.CreateChickenCommand;
 
 public record CreateChickenCommand : IRequest<int>
 {
